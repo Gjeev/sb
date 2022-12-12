@@ -12,7 +12,7 @@ export default function Header() {
     const handleClose = () => setOpen(false);
 
     // button display based on whether user is logged in or not 
-    const [loggedIn, setLoggedIn] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
     
     if(!loggedIn) {
         return (

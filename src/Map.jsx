@@ -5,24 +5,25 @@ import { services } from "@tomtom-international/web-sdk-services";
 import SearchBox from "@tomtom-international/web-sdk-plugin-searchbox";
 import ZoomControls from "@tomtom-international/web-sdk-plugin-zoomcontrols";
 import PanControls from "@tomtom-international/web-sdk-plugin-pancontrols";
-export default function Map() {
+import {data} from "./js/grid.js";
 
+export default function Map() {
   //storing ref of div
   const mapElement = useRef();
 
   //states
   const [map, setMap] = useState({});
-  const [longitude, setLongitude] = useState(77.894954);
-  const [latitude, setLatitude] = useState(29.86794);
+  const [longitude, setLongitude] = useState(77.405213504284674);
+  const [latitude, setLatitude] = useState(29.12083485654124);
 
-
-  useEffect(() => {
+    useEffect(() => {
     // defining the map 
     let map = tt.map({
       key: import.meta.env.VITE_MAP_API_KEY,
       container: mapElement.current,
-      center: [longitude, latitude],
-      zoom: 10,
+      center:[longitude,latitude],
+      zoom: 15,
+      style: "satellite.json"
     });
 
     //defining the search box & search box functions
@@ -39,7 +40,86 @@ export default function Map() {
       },
       noResultsMessage: "No results found.",
     });
+
+    //class declarations
+    class SearchMarkersManager {
+            constructor(map, options) {
+                this.map = map;
+                this._options = options || {};
+                this._poiList = undefined;
+                this.markers = {};
+            }
+            draw(poiList) {
+                this._poiList = poiList;
+                this.clear();
+                this._poiList.forEach(function (poi) {
+                    var markerId = poi.id;
+                    var poiOpts = {
+                        name: poi.poi ? poi.poi.name : undefined,
+                        address: poi.address ? poi.address.freeformAddress : '',
+                        distance: poi.dist,
+                        classification: poi.poi ? poi.poi.classifications[0].code : undefined,
+                        position: poi.position,
+                        entryPoints: poi.entryPoints
+                    };
+                    var marker = new SearchMarker(poiOpts, this._options);
+                    marker.addTo(this.map);
+                    this.markers[markerId] = marker;
+                }, this);
+            }
+            clear() {
+                for (var markerId in this.markers) {
+                    var marker = this.markers[markerId];
+                    marker.remove();
+                }
+                this.markers = {};
+                this._lastClickedMarker = null;
+            }
+        }
+    
+    
+    class SearchMarker {
+            constructor(poiData, options) {
+                this.poiData = poiData;
+                this.options = options || {};
+                this.marker = new tt.Marker({
+                    element: this.createMarker(),
+                    anchor: 'bottom'
+                });
+                var lon = this.poiData.position.lng || this.poiData.position.lon;
+                this.marker.setLngLat([
+                    lon,
+                    this.poiData.position.lat
+                ]);
+            }
+            addTo(map) {
+                this.marker.addTo(map);
+                this._map = map;
+                return this;
+            }
+            createMarker() {
+                var elem = document.createElement('div');
+                elem.className = 'tt-icon-marker-black tt-search-marker';
+                if (this.options.markerClassName) {
+                    elem.className += ' ' + this.options.markerClassName;
+                }
+                var innerElem = document.createElement('div');
+                innerElem.setAttribute('style', 'background: white; width: 10px; height: 10px; border-radius: 50%; border: 3px solid black;');
+
+                elem.appendChild(innerElem);
+                return elem;
+            }
+            remove() {
+                this.marker.remove();
+                this._map = null;
+            }
+        }
+    
+    
+    //initialising 
     let searchMarkersManager = new SearchMarkersManager(map);
+
+    //defining searchBox related functions
     function handleResultsFound(event) {
         var results = event.data.results.fuzzySearch.results;
     
@@ -87,77 +167,8 @@ export default function Map() {
     function handleResultClearing() {
         searchMarkersManager.clear();
     }
-    function SearchMarkersManager(map, options) {
-        this.map = map;
-        this._options = options || {};
-        this._poiList = undefined;
-        this.markers = {};
-    }
     
-    SearchMarkersManager.prototype.draw = function (poiList) {
-        this._poiList = poiList;
-        this.clear();
-        this._poiList.forEach(function (poi) {
-            var markerId = poi.id;
-            var poiOpts = {
-                name: poi.poi ? poi.poi.name : undefined,
-                address: poi.address ? poi.address.freeformAddress : '',
-                distance: poi.dist,
-                classification: poi.poi ? poi.poi.classifications[0].code : undefined,
-                position: poi.position,
-                entryPoints: poi.entryPoints
-            };
-            var marker = new SearchMarker(poiOpts, this._options);
-            marker.addTo(this.map);
-            this.markers[markerId] = marker;
-        }, this);
-    };
-    
-    SearchMarkersManager.prototype.clear = function () {
-        for (var markerId in this.markers) {
-            var marker = this.markers[markerId];
-            marker.remove();
-        }
-        this.markers = {};
-        this._lastClickedMarker = null;
-    };
-    function SearchMarker(poiData, options) {
-        this.poiData = poiData;
-        this.options = options || {};
-        this.marker = new tt.Marker({
-            element: this.createMarker(),
-            anchor: 'bottom'
-        });
-        var lon = this.poiData.position.lng || this.poiData.position.lon;
-        this.marker.setLngLat([
-            lon,
-            this.poiData.position.lat
-        ]);
-    }
-    
-    SearchMarker.prototype.addTo = function (map) {
-        this.marker.addTo(map);
-        this._map = map;
-        return this;
-    };
-    
-    SearchMarker.prototype.createMarker = function () {
-        var elem = document.createElement('div');
-        elem.className = 'tt-icon-marker-black tt-search-marker';
-        if (this.options.markerClassName) {
-            elem.className += ' ' + this.options.markerClassName;
-        }
-        var innerElem = document.createElement('div');
-        innerElem.setAttribute('style', 'background: white; width: 10px; height: 10px; border-radius: 50%; border: 3px solid black;');
-    
-        elem.appendChild(innerElem);
-        return elem;
-    };
-    
-    SearchMarker.prototype.remove = function () {
-        this.marker.remove();
-        this._map = null;
-    };
+    //searchBox event
     ttSearchBox.on("tomtom.searchbox.resultsfound", handleResultsFound);
     ttSearchBox.on("tomtom.searchbox.resultselected", handleResultSelection);
     ttSearchBox.on("tomtom.searchbox.resultfocused", handleResultSelection);
@@ -171,9 +182,28 @@ export default function Map() {
     map.addControl(ttZoomControls, 'bottom-right');
     map.addControl(ttPanControls, 'bottom-right');
 
+    // adding grid overlay
+    map.on('load', function() {
+        map.addLayer({
+            'id': 'overlay',
+            'type': 'fill',
+            'source': {
+                'type': 'geojson',
+                'data': data
+            },
+            'layout': {},
+            'paint': {
+                'fill-color': '#A4BFC1',
+                'fill-opacity': 0.6,
+                'fill-outline-color': '#A4BFC1'
+            }
+        });
+    });
     // put map 
     setMap(map);
-  }, []);
+
+    
+  }, []); // end of useEffect hook 
 
   return (
     <>

@@ -18,13 +18,6 @@ export default function App()
                 <Body/>
                 </Route>
 
-                <Route exact path="/login">
-                <Login/>
-                </Route>
-
-                <Route exact path="/signUp">
-                <SignUp/>
-                </Route>
             </Switch>
         </Router>
             
