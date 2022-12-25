@@ -20,6 +20,7 @@ header {
 #logo {
   width: 61px;
   height: 61px;
+  background-image: url("/images/logo.svg");
 }
 #icons {
   width: 41px;

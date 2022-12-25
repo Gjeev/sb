@@ -1,13 +1,8 @@
 .login-page {
-  position: absolute;
-  max-width: calc(626px + 449px);
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: black;
   border-radius: 7px;
 }
 .globe {

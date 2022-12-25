@@ -4,9 +4,13 @@
     width: 100vw;
     display: flex;
 }
-.right-body {
-    height: calc(100vh - 4em);
+.map {
+    height: 100%;
     width: calc(100vw - 120px);
-    background-color: #0d1b1c
+    background-color: #0d1b1c;
+}
+.tt-zoom-control
+{
+    margin-right: 30px;
 }
 
