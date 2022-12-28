@@ -13,4 +13,17 @@
 {
     margin-right: 30px;
 }
+.coordinates {
+    height: 50px;
+    background-color: white;
+    color: black;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 0.125em 1em;
+    left: 130px;
+    top: calc(100vh - 60px - 4em);
+}
 

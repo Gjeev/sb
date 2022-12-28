@@ -35,9 +35,12 @@ export default function Body() {
   return (
     <>
       <div className="main-content">
-        <Panel map={map} coords={coords}></Panel>
+        <Panel map={map}></Panel>
         {/* <Search map={map}/> */}
         <div className="map" ref={mapElement}></div>
+        <div className="coordinates">
+        <center>Coordinates: {coords[1].toFixed(5)}, {coords[0].toFixed(5)}</center>
+      </div>
       </div>
     </>
   );

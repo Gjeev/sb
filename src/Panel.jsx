@@ -142,11 +142,7 @@ export default function Panel(props) {
           </Tooltip>
         </li>
       </ul>
-      <div className="coordinates">
-        <label>Coordinates:</label>
-        <p>lat: {props.coords[1].toFixed(5)}</p>
-        <p>long: {props.coords[0].toFixed(5)}</p>
-      </div>
+      
     </div>
   );
 }

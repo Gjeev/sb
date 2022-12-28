@@ -21,8 +21,4 @@
 .left-panel li:hover,li:focus {
     background-color: #234548;
 }
-.coordinates {
-    width: 100%;
-    color: white;
-    font-size: small;
-}
+
