@@ -1,4 +1,4 @@
-import "./css/about.css";
+import "../../css/about.css";
 export default function About() {
   const partner = [
     {

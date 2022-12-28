@@ -1,16 +1,17 @@
-import "./css/panel.css";
+import "../css/panel.css";
 import Tooltip from "@mui/material/Tooltip";
 import DrawingTools from "@tomtom-international/web-sdk-plugin-drawingtools";
 import tt from "@tomtom-international/web-sdk-maps";
-import { data } from "./js/grid.js";
+import { data } from "../data/grid.js";
 import { useState } from "react";
 
+
 export default function Panel(props) {
-  let map = { ...props.map };
   const [gridLayer, setGridLayer] = useState(false);
   const [shapes, setShapes] = useState([]);
   const [click,setClick] = useState(0);
-  //drawing tool
+
+ //drawing tool
   let ttDrawingTools = new DrawingTools({
     ttMapsSdk: tt,
     controls: {
@@ -23,7 +24,7 @@ export default function Panel(props) {
     setClick(1);
     if(click == 0)
     {
-        map.addControl(ttDrawingTools, "top-left");
+        props.map.addControl(ttDrawingTools, "top-left");
     ttDrawingTools.on("tomtom.drawingtools.created", function (event) {
       addFeatures(event.data.features);
     });
@@ -104,8 +105,8 @@ export default function Panel(props) {
         },
       });
     } else {
-      map.removeLayer("gridOverlay");
-      map.removeSource("gridOverlay");
+      props.map.removeLayer("gridOverlay");
+      props.map.removeSource("gridOverlay");
     }
   }
 

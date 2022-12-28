@@ -68,7 +68,7 @@ a:focus {
 .buttons button:hover,
 button:focus {
   cursor: pointer;
-  background-color: #028a8d;
+  background-color: hsl(181, 97%, 28%);
 }
 button a{
   color: white;
@@ -77,8 +77,13 @@ button a{
 #icons {
   padding: 10px;
   border-radius: 7px;
+  border: solid hsl(0, 0%, 100%) 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #icons:hover {
-  background-color: rgb(175, 175, 175);
+  border: solid hsl(181, 97%, 28%) 1px;
+  border-radius: 4px;
 }
 

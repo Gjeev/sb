@@ -1,7 +1,4 @@
-import "./css/signup.css";
-// import Modal from "react-bootstrap/Modal";
-// import { useState } from "react";
-// import ModalHeader from "react-bootstrap/esm/ModalHeader";
+import "../../css/signup.css";
 
 export default function SignUp()
 {
