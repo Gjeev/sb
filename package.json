@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.10.17",
     "@tomtom-international/web-sdk-maps": "^6.21.3",
+    "@tomtom-international/web-sdk-plugin-drawingtools": "^1.1.5",
     "@tomtom-international/web-sdk-plugin-pancontrols": "^2.1.6",
     "@tomtom-international/web-sdk-plugin-searchbox": "^3.2.0",
     "@tomtom-international/web-sdk-plugin-zoomcontrols": "^2.1.6",
